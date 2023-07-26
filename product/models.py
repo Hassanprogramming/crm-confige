@@ -13,6 +13,7 @@ class Product(models.Model):
     name = models.CharField(verbose_name="نام محصول", max_length=100)
     dec = models.CharField(verbose_name="توضیخات", max_length=500, blank=True, null=True)
     Category = models.ForeignKey(Category, verbose_name="دسته", on_delete=models.CASCADE)
+    price = models.FloatField()
     img = models.ImageField(verbose_name="تصویر محصول")
     
     def __str__(self):

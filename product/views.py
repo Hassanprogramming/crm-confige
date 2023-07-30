@@ -1,6 +1,10 @@
 from django.views import View
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from .models import *
+from .forms import *
+from django.http import HttpResponseRedirect
+from django.urls import reverse
+
 
 # Create your views here.
 class ProductsView(View):
@@ -16,8 +20,41 @@ class Edit_ProductsView(View):
 
 class Add_ProductsView(View):
     def get(self, request):
-        return render(request, 'products/add-products.html')
+        category = Category.objects.filter(display=True)
+        form = Add_Product_Form()
+        context = {
+            'form': form,
+            'category': category,
+        }
+        return render(request, 'products/add-products.html', context)
+
+    def post(self, request):
+        form = Add_Product_Form(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('products'))
+        else:
+            context = {
+                'form': form
+            }
+            return render(request, 'products/add-products.html', context)
     
 class Add_CategoryView(View):
     def get(self, request):
-        return render(request, 'products/add-category.html')
+        form = Add_Category_Form()
+        context = {
+            'form': form
+        }
+        return render(request, 'products/add-category.html', context)
+
+    def post(self, request):
+        form = Add_Category_Form(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('products'))
+        else:
+            context = {
+                'form': form
+            }
+            print(form)
+            return render(request, 'products/add-category.html', context)    

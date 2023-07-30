@@ -10,6 +10,7 @@ class Factor(models.Model):
     date = models.DateTimeField(verbose_name="تاریخ ثبت")
     dec = models.CharField(verbose_name="توضیحات", max_length=500)
     checks = models.BooleanField(verbose_name="پرداخت شده؟")
+    number = models.FloatField(verbose_name="تعداد")
     price = models.FloatField()
     total_price = models.FloatField()
     img = models.ImageField()

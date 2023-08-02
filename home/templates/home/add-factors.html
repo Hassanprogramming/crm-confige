@@ -7,7 +7,7 @@
           <div class="tm-bg-primary-dark tm-block tm-block-h-auto">
             <div class="row">
               <div class="col-12">
-                <h2 class="tm-block-title d-inline-block">Add Category</h2>
+                <h2 class="tm-block-title d-inline-block">Add Factor</h2>
               </div>
             </div>
             <div class="row tm-edit-product-row">
@@ -15,23 +15,9 @@
                 <form action="" method="post" class="tm-edit-product-form">
                   {% csrf_token %}
                   {{ form.as_p }}
-                  {% comment %} <div class="form-group mb-3">
-                    <label
-                      for="name"
-                      >Category Name
-                    </label>
-                    <input
-                      id="name"
-                      name="name"
-                      type="text"
-                      class="form-control validate"
-                      required
-                    />
-                  </div> {% endcomment %}
-                  
               </div>
               <div class="col-12">
-                <button type="submit" class="btn btn-primary btn-block text-uppercase">Add Category Now</button>
+                <button type="submit" class="btn btn-primary btn-block text-uppercase">Add Product Now</button>
               </div>
             </form>
             </div>
@@ -39,6 +25,11 @@
         </div>
       </div>
     </div>
+    <script>
+      $(function() {
+        $("#expire_date").datepicker();
+      });
+    </script>
   </body>
 </html>
 {% endblock %}

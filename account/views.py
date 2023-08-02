@@ -4,6 +4,9 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.views import View
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib import messages
+
 
 # Create your views here.
 
@@ -26,17 +29,17 @@ class RegisterView(View):
             }
             return render(request, 'account/register.html', context)
         
-
+        
 class LoginView(View):
     def get(self, request):
-        form = LoginForm()
+        form = AuthenticationForm()
         context = {
             'form': form,
         }
         return render(request, 'account/login.html', context)
     
     def post(self, request):
-        form = LoginForm(request.POST)
+        form = AuthenticationForm(request, data=request.POST)
         if form.is_valid():
             user = authenticate(
                 username=form.cleaned_data['username'],
@@ -44,7 +47,7 @@ class LoginView(View):
             )
             if user is not None:
                 login(request, user)
-                return redirect('home')
+                return redirect('Home')
         context={
             'form': form, 
         }
@@ -55,3 +58,22 @@ class LogoutView(View):
     def get(self, request):
         logout(request)
         return HttpResponseRedirect(reverse('login'))
+    
+class ProfileEditView(View):
+    def get(self,request):
+        form = ProfileEdit_Form(instance=request.user)
+        context = {
+            'form': form
+        }
+        return render(request, 'account/profile.html', context)
+    
+    def post(self,request):
+        form = ProfileEdit_Form(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            return redirect('profile_edit')
+        else:
+            context = {
+                'form': form
+            }
+            return render(request, 'account/profile.html', context)

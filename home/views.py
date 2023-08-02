@@ -14,7 +14,7 @@ class HomeView(View):
 class FactorView(View):
     def get(self, request):
         factor = Factor.objects.all()
-        return render(request, 'home/factores.html', {'factor': factor})
+        return render(request, 'home/factors.html', {'factor': factor})
     
 class AddFactorView(View):
     def get(self, request):
@@ -24,10 +24,10 @@ class AddFactorView(View):
             'form': form,
             'factor': factor
         }
-        return render(request, 'home/add-factor.html', context)
+        return render(request, 'home/add-factors.html', context)
     
     def post(self, request):
-        form = Add_Factor_Form(request.POST, request.FILES)
+        form = Add_Factor_Form(request.POST)
         if form.is_valid():
             form.save()
             return HttpResponseRedirect(reverse('factor'))
@@ -35,5 +35,5 @@ class AddFactorView(View):
             context = {
                 'form': form
             }
-            return render(request, 'home/add-factor.html', context)
+            return render(request, 'home/add-factors.html', context)
     

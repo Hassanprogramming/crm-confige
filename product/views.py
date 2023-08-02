@@ -17,8 +17,26 @@ class ProductsView(View):
 
 class Edit_ProductsView(View):
     def get(self, request, pid):
-        product = get_object_or_404(Product,pk=pid)
-        return render(request, 'products/edit-products.html', {'product':product})
+        product = get_object_or_404(Product, pk=pid)
+        form = Add_Product_Form()
+        context = {
+            'form': form,
+            'product': product,
+        }
+        return render(request, 'products/edit-products.html', context)
+    
+    def post(self, request, pid):
+        product = get_object_or_404(Product, pk=pid)
+        form = Add_Product_Form(request.POST, instance=product)
+        if form.is_valid():
+            form.save()
+            return redirect('products')
+        else:
+            context = {
+                'form': form,
+                'product': product,
+            }
+        return render(request, 'products/edit-products.html', context)
 
 @method_decorator(csrf_exempt, name='dispatch')
 class Add_ProductsView(View):

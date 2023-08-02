@@ -1,10 +1,10 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.conf import settings
 
 # Create your models here.
 
 class Factor(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     name = models.CharField(verbose_name="نام محصول", max_length=100)
     Category = models.CharField(verbose_name="دسته", max_length=100)
     date = models.DateTimeField(verbose_name="تاریخ ثبت")

@@ -1,15 +1,13 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fa">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Product Admin - Dashboard HTML Template</title>
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css?family=Roboto:400,700"
-    />
+    <title>مدیریت محصول - قالب HTML داشبورد</title>
+    <link href="https://fonts.googleapis.com/css2?family=Sahel:wght@300;400;600;700&display=swap" rel="stylesheet">
+
     <!-- https://fonts.google.com/specimen/Roboto -->
     <link rel="stylesheet" href="{% static 'css/fontawesome.min.css' %}" />
     <!-- https://fontawesome.com/ -->
@@ -17,7 +15,7 @@
     <!-- https://getbootstrap.com/ -->
     <link rel="stylesheet" href="{% static 'css/templatemo-style.css' %}" />
     <!--
-	Product Admin CSS Template
+	قالب CSS مدیریت محصول
 	https://templatemo.com/tm-524-product-admin
 	-->
   </head>
@@ -25,7 +23,7 @@
   <nav class="navbar navbar-expand-xl">
     <div class="container h-100">
       <a class="navbar-brand" href="{% url 'Home' %}">
-        <h1 class="tm-site-title mb-0">Product Admin</h1>
+        <h1 class="tm-site-title mb-0">مدیریت محصول</h1>
       </a>
       <button
         class="navbar-toggler ml-auto mr-0"
@@ -34,7 +32,7 @@
         data-target="#navbarSupportedContent"
         aria-controls="navbarSupportedContent"
         aria-expanded="false"
-        aria-label="Toggle navigation"
+        aria-label="تغییر ناوبری"
       >
         <i class="fas fa-bars tm-nav-icon"></i>
       </button>
@@ -44,8 +42,8 @@
           <li class="nav-item">
             <a class="nav-link active" href="{% url 'Home' %}">
               <i class="fas fa-tachometer-alt"></i>
-              Dashboard
-              <span class="sr-only">(current)</span>
+              داشبورد
+              <span class="sr-only">(فعلی)</span>
             </a>
           </li>
           <li class="nav-item dropdown">
@@ -59,30 +57,42 @@
               aria-expanded="false"
             >
               <i class="far fa-file-alt"></i>
-              <span> Reports <i class="fas fa-angle-down"></i> </span>
+              <span> گزارش‌ها <i class="fas fa-angle-down"></i> </span>
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <a class="dropdown-item" href="#">Daily Report</a>
-              <a class="dropdown-item" href="#">Weekly Report</a>
-              <a class="dropdown-item" href="#">Yearly Report</a>
+              <a class="dropdown-item" href="#">گزارش روزانه</a>
+              <a class="dropdown-item" href="#">گزارش هفتگی</a>
+              <a class="dropdown-item" href="#">گزارش سالیانه</a>
             </div>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="{% url 'products' %}">
               <i class="fas fa-shopping-cart"></i>
-              Products
+              محصولات
             </a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="{% url 'factor' %}">
               <i class="fas fa-file"></i>
-              Factor
+              فاکتور
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="accounts.html">
+            <a class="nav-link" href="{% url 'service' %}">
+              <i class="fas fa-file"></i>
+              خدمات
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'customer' %}">
+              <i class="fa fa-user-edit"></i>
+              مشتریان
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'account' %}">
               <i class="far fa-user"></i>
-              Accounts
+              حساب‌ها
             </a>
           </li>
           <li class="nav-item dropdown">
@@ -96,12 +106,12 @@
               aria-expanded="false"
             >
               <i class="fas fa-cog"></i>
-              <span> Settings <i class="fas fa-angle-down"></i> </span>
+              <span> تنظیمات <i class="fas fa-angle-down"></i> </span>
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <a class="dropdown-item" href="{% url 'profile_edit' %}">Profile</a>
-              <a class="dropdown-item" href="#">Billing</a>
-              <a class="dropdown-item" href="#">Customize</a>
+              <a class="dropdown-item" href="{% url 'profile_edit' %}">پروفایل</a>
+              <a class="dropdown-item" href="#">صورتحساب</a>
+              <a class="dropdown-item" href="#">سفارشی‌سازی</a>
             </div>
           </li>
         </ul>
@@ -110,17 +120,17 @@
             {% if request.user.is_authenticated %}
                 <a class="nav-link d-block" href="{% url 'logout' %}">
                     <i class="fa fa-user" aria-hidden="true"></i>
-                    {{ request.user.name }}, <b>Logout</b>
+                    {{ request.user.name }}, <b>خروج</b>
                 </a>
             {% else %}
                 <a class="nav-link d-block" href="{% url 'login' %}">
-                  <b>Login</b>
+                  <b>ورود</b>
                 </a>
             {% endif %}
           </li>
           <li>
             <a class="nav-link d-block" href="{% url 'register' %}">
-              <b>sign up</b>
+              <b>ثبت نام</b>
             </a>
           </li>
         </ul>
@@ -133,7 +143,7 @@
   <footer class="tm-footer row tm-mt-small">
     <div class="col-12 font-weight-light">
       <p class="text-center text-white mb-0 px-4 small">
-        Copyright &copy; <b>2023</b> All rights reserved.
+        کپی‌رایت &copy; <b>۲۰۲۳</b> تمامی حقوق محفوظ است.
       </p>
     </div>
   </footer>
@@ -147,6 +157,7 @@
   <script src="{% static 'js/bootstrap.min.js' %}"></script>
   <!-- https://getbootstrap.com/ -->
   <script src="{% static 'js/tooplate-scripts.js' %}"></script>
+  <script src="https://code.jquery.com/jquery-3.7.0.js" integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
   <script>
     Chart.defaults.global.defaultFontColor = "white";
     let ctxLine,
@@ -159,12 +170,13 @@
       configBar,
       configPie,
       lineChart;
-    barChart, pieChart;
+      {% comment %} barChart;
+      pieChart; {% endcomment %}
     // DOM is ready
     $(function () {
-      drawLineChart(); // Line Chart
-      drawBarChart(); // Bar Chart
-      drawPieChart(); // Pie Chart
+      drawLineChart(); // نمودار خطی
+      drawBarChart(); // نمودار میله‌ای
+      drawPieChart(); // نمودار دایره‌ای
 
       $(window).resize(function () {
         updateLineChart();

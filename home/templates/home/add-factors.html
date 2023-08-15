@@ -1,5 +1,7 @@
-{% extends 'main.html' %} {% block content %} {% load static %}
-<html lang="en">
+{% extends 'main.html' %}
+{% block content %}
+{% load static %} {% load custom_tags %}
+<html lang="fa">
   <body>
     <div class="container tm-mt-big tm-mb-big">
       <div class="row">
@@ -7,29 +9,141 @@
           <div class="tm-bg-primary-dark tm-block tm-block-h-auto">
             <div class="row">
               <div class="col-12">
-                <h2 class="tm-block-title d-inline-block">Add Factor</h2>
+                <h2 class="tm-block-title d-inline-block">افزودن فاکتور</h2>
               </div>
             </div>
             <div class="row tm-edit-product-row">
               <div class="col-xl-6 col-lg-6 col-md-12">
-                <form action="" method="post" class="tm-edit-product-form">
+                <form action="{% url 'add_factor' %}" method="post" class="tm-edit-product-form" id="addFactorForm">
                   {% csrf_token %}
-                  {{ form.as_p }}
+                    <div class="form-group mb-3">
+                      <label for="category">دسته بندی</label>
+                      <select class="custom-select tm-select-accounts" id="category" name="Category">
+                          <option value="">دسته بندی را انتخاب کنید</option>
+                          {% for cat in category %}
+                              <option value="{{ cat.id }}">{{ cat.name }}</option>
+                          {% endfor %}
+                      </select>
+                  </div>
+                  <div class="form-group mb-3">
+                      <label for="name">نام محصول</label>
+                      {{form.name}}
+                      {% comment %} <select class="custom-select tm-select-accounts" id="product" name="name">
+                          <option value="{{form.name}}" name="name">محصول را انتخاب کنید</option>
+                      </select> {% endcomment %}
+                  </div>
+                  <div class="form-group mb-3">
+                      <label for="customer">نام مشتری</label>
+                      {{form.customer}}
+                      {% comment %} <select class="custom-select tm-select-accounts" id="product" name="name">
+                          <option value="">محصول را انتخاب کنید</option>
+                      </select> {% endcomment %}
+                  </div>
+                  <div class="form-group mb-3">
+                    <label for="dec">توضیحات</label>
+                    <br>
+                    <textarea class="form-control validate" name="dec" rows="3" required></textarea>
+                  </div>
+                  <div class="row">
+                    <div class="form-group mb-3 col-xs-12 col-sm-6">
+                      <label for="number">تعداد</label>
+                      <input id="number" name="number" type="number" class="form-control validate" data-large-mode="true" />
+                    </div>
+                    <div class="form-group mb-3 col-xs-12 col-sm-6">
+                      <label for="price">قیمت</label>
+                      <input id="price" name="price" type="number" class="form-control validate" data-large-mode="true" />
+                    </div>
+                    <div class="form-group mb-3 col-xs-12 col-sm-6">
+                      <label for="total_price">قیمت کل</label>
+                      <input id="total_price" name="total_price" type="number" class="form-control validate" required />
+                    </div>
+                    <div class="form-group mb-3 col-xs-12 col-sm-6">
+                      <label
+                        for="expire_date"
+                        >پرداخت شده؟
+                      </label>
+                      <br>
+                      <input type="checkbox" id="{{ form.checks.id_for_label }}" name="{{ form.checks.html_name }}" class="checkbox_form" {% if form.checks.value %}checked{% endif %}>
+                    </div>
+                    <div class="col-12">
+                      <button type="submit" class="btn btn-primary btn-block text-uppercase">اضافه کردن محصول</button>
+                    </div>
+                  </div>
+                </form>
               </div>
-              <div class="col-12">
-                <button type="submit" class="btn btn-primary btn-block text-uppercase">Add Product Now</button>
-              </div>
-            </form>
             </div>
           </div>
         </div>
       </div>
     </div>
+
+    {% comment %} loading product base on category {% endcomment %}
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-      $(function() {
-        $("#expire_date").datepicker();
-      });
+    $(document).ready(function() {
+        $('#category').change(function() {
+            var categoryId = $(this).val();
+            var productSelect = $('#product');
+            productSelect.empty();
+            productSelect.append('<option value="">محصول را انتخاب کنید</option>');
+
+            if (categoryId) {
+                $.ajax({
+                    url: '/load-products/',  // Correct URL based on your URLs configuration
+                    type: 'GET',
+                    data: {'category_id': categoryId},
+                    dataType: 'json',
+                    success: function(data) {
+                        var products = data.products;
+                        $.each(products, function(index, product) {
+                            productSelect.append('<option value="' + product.id + '">' + product.name + '</option>');
+                        });
+                    },
+                    error: function() {
+                        alert('Error loading products.');
+                    }
+                });
+            }
+        });
+    });
     </script>
+
+{% comment %} loading product details {% endcomment %}
+
+    {% comment %} <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+    $(document).ready(function() {
+        $('#category').change(function() {
+            // Existing category selection code
+        });
+        
+        $('#product').change(function() {
+            var productId = $(this).val();
+            var productDetailsContainer = $('#product-details');
+            productDetailsContainer.empty();
+            
+            if (productId) {
+                $.ajax({
+                    url: '/product-details/',  // Correct URL for ProductDetailsView
+                    type: 'GET',
+                    data: {'product_id': productId},
+                    dataType: 'json',
+                    success: function(data) {
+                        var product = data.product;
+                        // Update the product-details container with the retrieved details
+                        productDetailsContainer.append('<p>Name: ' + product.name + '</p>');
+                        productDetailsContainer.append('<p>Price: $' + product.price + '</p>');
+                        // Add more details as needed
+                    },
+                    error: function() {
+                        alert('Error loading product details.');
+                    }
+                });
+            }
+        });
+    });
+    </script> {% endcomment %}
   </body>
 </html>
 {% endblock %}

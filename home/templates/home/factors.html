@@ -1,50 +1,55 @@
-{% extends 'main.html' %} {% block content %} {% load static %}
- <body id="reportsPage">
+{% extends 'main.html' %} 
+{% block content %} 
+{% load static %}
+<body id="reportsPage">
     <div class="container mt-5">
-      <div class="row tm-content-row">
-        <div class="col-sm-12 col-md-12 col-lg-8 col-xl-8 tm-block-col">
-          <div class="tm-bg-primary-dark tm-block tm-block-products">
-            <div class="tm-product-table-container">
-              <table class="table table-hover tm-table-small tm-product-table">
-                <thead>
-                  <tr>
-                    <th scope="col">&nbsp;</th>
-                    <th scope="col">PRODUCT NAME</th>
-                    <th scope="col">UNIT SOLD</th>
-                    <th scope="col">IN STOCK</th>
-                    <th scope="col">EXPIRE DATE</th>
-                    <th scope="col">&nbsp;</th>
-                  </tr>
-                </thead>
-                {% for i in factor %}
-                <tbody>
-                  <tr>
-                    <th scope="row"><input type="checkbox" /></th>
-                    <td class="tm-product-name"><a href="{{i.id}}">{{ i.name }}</a></td>
-                    <td>{{ i.price }}</td>
-                    <td>550</td>
-                    <td>28 March 2019</td>
-                    <td>
-                      <a href="#" class="tm-product-delete-link">
-                        <i class="far fa-trash-alt tm-product-delete-icon"></i>
-                      </a>
-                    </td>
-                  </tr>
-                </tbody>
-                {% endfor %}
-              </table>
+        <div class="row tm-content-row">
+            <div class="col-sm-12 col-md-12 col-lg-8 col-xl-8 tm-block-col">
+                <div class="tm-bg-primary-dark tm-block tm-block-products">
+                    <h2 class="tm-block-title">دسته‌بندی فاکتورها</h2>
+                    <div class="tm-product-table-container">
+                        <table class="table table-hover tm-table-small tm-product-table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">&nbsp;</th>
+                                    <th scope="col">نام فاکتور</th>
+                                    <th scope="col">مبلغ کل</th>
+                                    <th scope="col">پرداخت شده</th>
+                                    <th scope="col">تاریخ</th>
+                                    <th scope="col">&nbsp;</th>
+                                </tr>
+                            </thead>
+                            {% for i in factor %}
+                            <tbody>
+                                <tr>
+                                    <th scope="row"><input type="checkbox" /></th>
+                                    <td class="tm-product-name"><a href="{{ i.id }}" style="color: white">{{ i.name }}</a></td>
+                                    <td>{{ i.price }}</td>
+                                    {% if i.checks == True %}
+                                    <td><input type="checkbox" onclick="return false;" checked /></td>
+                                    {% else %}
+                                    <td><input type="checkbox" onclick="return false;" /></td>
+                                    {% endif %}
+                                    <td>{{ i.date }}</td>
+                                    <td>
+                                        <a href="#" class="tm-product-delete-link">
+                                            <i class="far fa-trash-alt tm-product-delete-icon"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            {% endfor %}
+                        </table>
+                    </div>
+                    <!-- جدول محصولات -->
+                    <a href="{% url 'add_factor' %}" class="btn btn-primary btn-block text-uppercase mb-3">افزودن فاکتور جدید</a>
+                    <button class="btn btn-primary btn-block text-uppercase">
+                        حذف فاکتور انتخاب شده
+                    </button>
+                </div>
             </div>
-            <!-- table container -->
-            <a
-              href="{% url 'add_factor' %}"
-              class="btn btn-primary btn-block text-uppercase mb-3">Add new product</a>
-            <button class="btn btn-primary btn-block text-uppercase">
-              Delete selected products
-            </button>
-          </div>
         </div>
-      </div>
     </div>
-  </body>
+</body>
 </html>
 {% endblock %}

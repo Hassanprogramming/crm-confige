@@ -1,0 +1,41 @@
+{% extends 'main.html' %} 
+{% block content %} 
+{% load static %}
+<!DOCTYPE html>
+<html lang="fa">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>حساب‌ها - قالب مدیریت محصول</title>
+  </head>
+
+  <body id="reportsPage">
+    <div class="" id="home">
+      <div class="container mt-5">
+        <!-- row -->
+        <div class="col-12 tm-block-col">
+          <div class="tm-bg-primary-dark tm-block tm-block-taller tm-block-overflow" style="overflow-y: scroll;">
+              <h2 class="tm-block-title">لیست مشتریان</h2>
+              {% for i in customer %}
+              <div class="tm-notification-items">
+                  <div class="media tm-notification-item">
+                      <div class="tm-gray-circle"><img src="{% static 'img/notification-01.jpg' %}" alt="تصویر آواتار" class="rounded-circle"></div>
+                      <div class="media-body">
+                          <p class="mb-2"><b>{{ i.user }}</b><a href="{{i.id}}" class="tm-notification-link">{{ i.name }}</a></p>
+                          <span class="tm-small tm-text-color-secondary">{{ i.date }}</span>
+                      </div>
+                  </div>
+              </div>
+              {% endfor %}
+          </div>
+          <button class="btn btn-primary btn-block text-uppercase mb-3">
+                        <a href="{% url 'add_customer' %}" style="color:white">
+                            افزودن مشتری جدید
+                        </a>
+                    </button>
+        </div>
+      </div>
+  </body>
+</html>
+{% endblock %}

@@ -1,5 +1,7 @@
-{% extends 'main.html' %} {% block content %} {% load static %}
-<html lang="en">
+{% extends 'main.html' %}
+{% block content %}
+{% load static %}
+<html lang="fa">
   <body>
     <div class="container tm-mt-big tm-mb-big">
       <div class="row">
@@ -7,81 +9,47 @@
           <div class="tm-bg-primary-dark tm-block tm-block-h-auto">
             <div class="row">
               <div class="col-12">
-                <h2 class="tm-block-title d-inline-block">Add Product</h2>
+                <h2 class="tm-block-title d-inline-block">افزودن محصول</h2>
               </div>
             </div>
             <div class="row tm-edit-product-row">
               <div class="col-xl-6 col-lg-6 col-md-12">
                 <form action="" method="post" class="tm-edit-product-form">
                   {% csrf_token %}
-                  {{ form.as_p }}
-                  {% comment %} <div class="form-group mb-3">
+                  <div class="form-group mb-3">
                     <label
                       for="name"
-                      >Product Name
+                      >نام محصول
                     </label>
-                    <input
-                      id="name"
-                      name="name"
-                      type="text"
-                      class="form-control validate"
-                      required
-                    />
+                    <br>
+                    {{form.name}}
                   </div>
                   <div class="form-group mb-3">
                     <label
                       for="description"
-                      >Description</label
+                      >توضیحات</label
                     >
-                    <textarea
-                      class="form-control validate"
-                      rows="3"
-                      required
-                    ></textarea>
+                    <br>
+                    {{form.dec}}
                   </div>
                   <div class="form-group mb-3">
                     <label
                       for="category"
-                      >Category</label
+                      >دسته‌بندی</label
                     >
-                    <select
-                      class="custom-select tm-select-accounts"
-                      id="category"
-                    >
-                      <option selected>Select category</option>
-                      <option value="1">New Arrival</option>
-                      <option value="2">Most Popular</option>
-                      <option value="3">Trending</option>
-                    </select>
+                    <br>
+                    {{form.Category}}
                   </div>
                   <div class="row">
                       <div class="form-group mb-3 col-xs-12 col-sm-6">
                           <label
                             for="expire_date"
-                            >Expire Date
+                            >قیمت
                           </label>
-                          <input
-                            id="expire_date"
-                            name="expire_date"
-                            type="text"
-                            class="form-control validate"
-                            data-large-mode="true"
-                          />
+                          <br>
+                          {{form.price}}
                         </div>
-                        <div class="form-group mb-3 col-xs-12 col-sm-6">
-                          <label
-                            for="stock"
-                            >Units In Stock
-                          </label>
-                          <input
-                            id="stock"
-                            name="stock"
-                            type="text"
-                            class="form-control validate"
-                            required
-                          />
-                        </div>
-                  </div> {% endcomment %}
+                  </div>
                   
               </div>
               {% comment %} <div class="col-xl-6 col-lg-6 col-md-12 mx-auto mb-4">
@@ -96,13 +64,13 @@
                   <input
                     type="button"
                     class="btn btn-primary btn-block mx-auto"
-                    value="UPLOAD PRODUCT IMAGE"
+                    value="آپلود تصویر محصول"
                     onclick="document.getElementById('fileInput').click();"
                   />
                 </div>
               </div> {% endcomment %}
               <div class="col-12">
-                <button type="submit" class="btn btn-primary btn-block text-uppercase">Add Product Now</button>
+                <button type="submit" class="btn btn-primary btn-block text-uppercase">اکنون محصول اضافه کنید</button>
               </div>
             </form>
             </div>
@@ -110,11 +78,6 @@
         </div>
       </div>
     </div>
-    <script>
-      $(function() {
-        $("#expire_date").datepicker();
-      });
-    </script>
   </body>
 </html>
 {% endblock %}

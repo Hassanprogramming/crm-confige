@@ -18,18 +18,21 @@ class UserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, name, password, phone, email, **other_fields):
-        other_fields.setdefault('is_admin', True)
-        other_fields.setdefault('is_second_admin', True)
-        other_fields.setdefault('is_third_admin', True)
-        other_fields.setdefault('is_active', True)
+    def create_superuser(self, password=None, **other_fields):
+        user = self.create_user(password=password, **other_fields)
+        user.is_admin = True
+        user.is_active = True
+        user.is_second_admin = False
+        user.confirm_profile = True
+        user.save(using=self._db)
+        return user
 
-        if other_fields.get('is_admin') is not True:
-            raise ValueError('Superuser must have is_admin=True.')
-        
-        return self.create_user(name, password, phone, email, **other_fields)
 
 class User(AbstractBaseUser):
+    class Meta:
+        verbose_name = "کاربران"
+        verbose_name_plural = "کاربران"
+        
     name = models.CharField(unique=True, max_length=20)
     phone = models.CharField(unique=True, max_length=11)
     email = models.EmailField(max_length=100)
@@ -38,6 +41,7 @@ class User(AbstractBaseUser):
     is_active = models.BooleanField(default=True)
     is_second_admin = models.BooleanField(default=True)
     is_third_admin = models.BooleanField(default=True)
+    profile_img = models.ImageField()
     password1 = models.CharField(max_length=150)
     password2 = models.CharField(max_length=150)
     objects = UserManager()
@@ -72,3 +76,33 @@ class User(AbstractBaseUser):
     @property
     def is_staff(self):
         return self.is_admin
+
+    @property
+    def imageURL(self):
+        try:
+            url = self.profile_img.url
+        except:
+            url = ''
+        return url
+    
+    
+
+class Customer(models.Model):
+    class Meta:
+        verbose_name = "مشتری ها"
+        verbose_name_plural = "مشتری ها"
+        
+    name = models.CharField(verbose_name="نام مشتری", max_length=50)
+    company_name = models.CharField(verbose_name="نام شرکت", max_length=100)
+    date = models.DateTimeField(verbose_name="تاریخ ثبت مشتری", auto_now=False, auto_now_add=False)
+    img = models.ImageField(upload_to='images/',verbose_name="لوگوی شرکت", blank=True, null=True)
+    
+    def __str__(self):
+        return self.name
+    @property
+    def imageURL(self):
+        try:
+            url = self.img.url
+        except:
+            url = ''
+        return url

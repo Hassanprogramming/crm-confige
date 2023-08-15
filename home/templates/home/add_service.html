@@ -1,0 +1,60 @@
+{% extends 'main.html' %} 
+{% block content %} 
+{% load static %} {% load custom_tags %}
+<html lang="fa">
+<link rel="stylesheet" href="{% static 'css/row.css' %}" />
+  <body>
+    <div class="container tm-mt-big tm-mb-big">
+      <div class="row">
+        <div class="col-xl-9 col-lg-10 col-md-12 col-sm-12 mx-auto">
+          <div class="tm-bg-primary-dark tm-block tm-block-h-auto">
+            <div class="row">
+              <div class="col-12">
+                <h2 class="tm-block-title d-inline-block">افزودن خدمات</h2>
+              </div>
+            </div>
+            <div class="row tm-edit-product-row" style="flex-direction: column">
+              <div class="col-xl-6 col-lg-6 col-md-12" style="max-width: 100%;">
+                <form action="" method="post" class="tm-edit-product-form">
+                  {% csrf_token %}
+                  <div class="table-responsive">
+                    <table class="table" dir="rtl">
+                      <thead>
+                        <tr>
+                          <th>نام خدمات</th>
+                          <th>نام مشتری</th>
+                          <th>توضیحات</th>
+                          <th>پرداخت شده؟</th>
+                          <th>تعداد</th>
+                          <th>قیمت واحد</th>
+                          <th>قیمت کل</th>
+                          <th>تصویر</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>{{ form.name_service }}</td>
+                          <td>{{ form.customer }}</td>
+                          <td>{{ form.dec }}</td>
+                          <td>{{ form.checks }}</td>
+                          <td>{{ form.number }}</td>
+                          <td>{{ form.price }}</td>
+                          <td>{{ form.total_price }}</td>
+                          <td>{{ form.img }}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  <div class="col-12">
+                    <button type="submit" class="btn btn-primary btn-block text-uppercase" style="margin-top: 30px;">افزودن خدمات</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+{% endblock %}

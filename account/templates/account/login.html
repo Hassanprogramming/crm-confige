@@ -1,11 +1,13 @@
-{% extends 'main.html' %} {% block content %} {% load static %}
+{% extends 'main.html' %} 
+{% block content %} 
+{% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fa">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Login Page - Product Admin Template</title>
+    <title>صفحه ورود - قالب مدیریت محصول</title>
   </head>
 
   <body>
@@ -15,7 +17,7 @@
           <div class="tm-bg-primary-dark tm-block tm-block-h-auto">
             <div class="row">
               <div class="col-12 text-center">
-                <h2 class="tm-block-title mb-4">Welcome to Dashboard, Login</h2>
+                <h2 class="tm-block-title mb-4">به داشبورد خوش آمدید، وارد شوید</h2>
               </div>
             </div>
             <div class="row mt-2">
@@ -24,7 +26,7 @@
                   {% csrf_token %}
                   {{ form.as_p }}
                   {% comment %} <div class="form-group">
-                    <label for="name">Username</label>
+                    <label for="name">نام کاربری</label>
                     <input
                       name="name"
                       for="name"
@@ -36,7 +38,7 @@
                     />
                   </div>
                   <div class="form-group mt-3">
-                    <label for="password">Password</label>
+                    <label for="password">رمز عبور</label>
                     <input
                       name="password"
                       for="password"
@@ -52,11 +54,11 @@
                       type="submit"
                       class="btn btn-primary btn-block text-uppercase"
                     >
-                      Login
+                      ورود
                     </button>
                   </div>
                   <button class="mt-5 btn btn-primary btn-block text-uppercase"><a href="{% url 'password_reset' %}" style="color: #fff;">
-                    Forgot your password?</a>
+                    رمز عبور خود را فراموش کرده‌اید؟</a>
                   </button>
                 </form>
               </div>

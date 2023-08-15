@@ -7,18 +7,17 @@
           <div class="tm-bg-primary-dark tm-block tm-block-h-auto">
             <div class="row">
               <div class="col-12">
-                <h2 class="tm-block-title d-inline-block">Add Category</h2>
+                <h2 class="tm-block-title d-inline-block">اضافه کردن دسته</h2>
               </div>
             </div>
             <div class="row tm-edit-product-row">
               <div class="col-xl-6 col-lg-6 col-md-12">
                 <form action="" method="post" class="tm-edit-product-form">
                   {% csrf_token %}
-                  {{ form.as_p }}
-                  {% comment %} <div class="form-group mb-3">
+                  <div class="form-group mb-3">
                     <label
                       for="name"
-                      >Category Name
+                      >نام دسته
                     </label>
                     <input
                       id="name"
@@ -27,11 +26,16 @@
                       class="form-control validate"
                       required
                     />
-                  </div> {% endcomment %}
+                    <label
+                      for="display"
+                      >نمایش داده شود؟
+                    </label>
+                    <input type="checkbox" style="margin-top: 40px;" id="{{ form.display.id_for_label }}" name="{{ form.display.html_name }}" class="checkbox_form" {% if form.display.value %}checked{% endif %}>
+                  </div>
                   
               </div>
               <div class="col-12">
-                <button type="submit" class="btn btn-primary btn-block text-uppercase">Add Category Now</button>
+                <button type="submit" class="btn btn-primary btn-block text-uppercase">اضافه کردن دسته</button>
               </div>
             </form>
             </div>

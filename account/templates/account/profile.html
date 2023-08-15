@@ -1,11 +1,13 @@
-{% extends 'main.html' %} {% block content %} {% load static %}
+{% extends 'main.html' %} 
+{% block content %} 
+{% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fa">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Profile - Product Admin Template</title>
+    <title>پروفایل - قالب مدیریت محصول</title>
   </head>
 
   <body id="reportsPage">
@@ -15,11 +17,11 @@
         <div class="row tm-content-row">
           {% comment %} <div class="tm-block-col tm-col-avatar">
             <div class="tm-bg-primary-dark tm-block tm-block-avatar">
-              <h2 class="tm-block-title">Change Avatar</h2>
+              <h2 class="tm-block-title">تغییر آواتار</h2>
               <div class="tm-avatar-container">
                 <img
                   src="img/avatar.png"
-                  alt="Avatar"
+                  alt="آواتار"
                   class="tm-avatar img-fluid mb-4"
                 />
                 <a href="#" class="tm-avatar-delete-link">
@@ -27,33 +29,57 @@
                 </a>
               </div>
               <button class="btn btn-primary btn-block text-uppercase">
-                Upload New Photo
+                آپلود عکس جدید
               </button>
             </div>
           </div> {% endcomment %}
           <div class="tm-block-col tm-col-account-settings">
             <div class="tm-bg-primary-dark tm-block tm-block-settings">
-              <h2 class="tm-block-title">Account Settings</h2>
+              <h2 class="tm-block-title">تنظیمات حساب</h2>
               <form action="" method="post" class="tm-signup-form row">
                 {% csrf_token %}
-                {{ form.as_p }}
                 <div class="form-group col-lg-6">
+                  <label for="name">نام حساب</label>
+                  <br/>
+                  {{ form.name }}
+                </div>
+                <div class="form-group col-lg-6">
+                  <label for="email">ایمیل حساب</label>
+                  <br/>
+                  {{ form.email }}
+                </div>
+                <div class="form-group col-lg-6">
+                  <label for="phone">تلفن</label>
+                  <br/>
+                  {{ form.phone }}
+                </div>
+                <div class="col-12">
                   <label class="tm-hide-sm">&nbsp;</label>
                   <button
+                    style="margin-bottom: 20px;"
                     type="submit"
                     class="btn btn-primary btn-block text-uppercase"
                   >
-                    Update Your Profile
+                    به روزرسانی پروفایل شما
                   </button>
                 </div>
                 <div class="col-12">
                   <button
+                    style="margin-bottom: 20px;"
                     type="submit"
                     class="btn btn-primary btn-block text-uppercase"
-                  >
-                    Delete Your Account
+                  ><a href="{% url 'password_change' %}" style="color: #fff;">
+                    تغییر رمز عبور؟</a>
                   </button>
                 </div>
+                {% comment %} <div class="col-12">
+                  <button
+                    type="submit"
+                    class="btn btn-primary btn-block text-uppercase"
+                  ><a href="{% url 'delete_account' %}" style="color: #fff;">
+                    حذف حساب کاربری</a>
+                  </button>
+                </div> {% endcomment %}
               </form>
             </div>
           </div>

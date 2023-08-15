@@ -4,8 +4,6 @@ from .models import *
 from .forms import *
 from django.http import HttpResponseRedirect
 from django.urls import reverse
-from django.views.decorators.csrf import csrf_exempt
-from django.utils.decorators import method_decorator
 
 
 # Create your views here.
@@ -27,7 +25,7 @@ class Edit_ProductsView(View):
     
     def post(self, request, pid):
         product = get_object_or_404(Product, pk=pid)
-        form = Add_Product_Form(request.POST, instance=product)
+        form = Add_Product_Form(request.POST, request.FILES, instance=product)
         if form.is_valid():
             form.save()
             return redirect('products')
@@ -38,7 +36,6 @@ class Edit_ProductsView(View):
             }
         return render(request, 'products/edit-products.html', context)
 
-@method_decorator(csrf_exempt, name='dispatch')
 class Add_ProductsView(View):
     def get(self, request):
         category = Category.objects.filter(display=True)
@@ -53,6 +50,7 @@ class Add_ProductsView(View):
         form = Add_Product_Form(request.POST, request.FILES)
         if form.is_valid():
             form.save()
+            print(form)
             return HttpResponseRedirect(reverse('products'))
         else:
             context = {
@@ -78,4 +76,4 @@ class Add_CategoryView(View):
                 'form': form
             }
             print(form)
-            return render(request, 'products/add-category.html', context)    
+            return render(request, 'products/add-category.html', context)

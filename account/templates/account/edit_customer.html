@@ -13,7 +13,7 @@
             </div>
             <div class="row tm-edit-product-row">
               <div class="col-xl-6 col-lg-6 col-md-12">
-                <form action="" method="post" class="tm-edit-product-form">
+                <form action="" method="post" class="tm-edit-product-form" enctype="multipart/form-data">
                   {% csrf_token %}
                   <div class="form-group mb-3">
                     <label
@@ -41,25 +41,16 @@
                   </div>
                   
               </div>
-              <div class="col-xl-6 col-lg-6 col-md-12 mx-auto mb-4">
-                <div class="tm-product-img-edit mx-auto">
-                  <a href="/static/images/{{product.img}}">
-                  <img src="/static/images/{{product.img}}" alt="تصویر محصول" class="img-fluid d-block mx-auto">
-                  </a>
-                  <i
-                    class="fas fa-cloud-upload-alt tm-upload-icon"
-                    onclick="document.getElementById('fileInput').click();"
-                  ></i>
-                </div>
+              <div class="col-xl-6 col-lg-6 col-md-12 mx-auto mb-4" style="margin-top: -20px;">
                 <div class="custom-file mt-3 mb-3">
-                  <input id="fileInput" type="file" style="display:none;" />
+                  <input id="fileInput" type="file" style="display:none;" name="img" />
                   <input
                     type="button"
+                    name="img"
                     class="btn btn-primary btn-block mx-auto"
-                    value="تغییر تصویر"
+                    value="افزودن پروفایل"
                     onclick="document.getElementById('fileInput').click();"
                   />
-                </div>
               </div>
               <div class="col-12">
                 <button type="submit" class="btn btn-primary btn-block text-uppercase">بروزرسانی</button>

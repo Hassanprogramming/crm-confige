@@ -15,28 +15,10 @@
       <div class="container mt-5">
         <!-- row -->
         <div class="row tm-content-row">
-          <div class="tm-block-col tm-col-avatar">
-            <div class="tm-bg-primary-dark tm-block tm-block-avatar">
-              <h2 class="tm-block-title">تغییر آواتار</h2>
-              <div class="tm-avatar-container">
-                <img
-                  src="img/avatar.png"
-                  alt="آواتار"
-                  class="tm-avatar img-fluid mb-4"
-                />
-                <a href="#" class="tm-avatar-delete-link">
-                  <i class="far fa-trash-alt tm-product-delete-icon"></i>
-                </a>
-              </div>
-              <button class="btn btn-primary btn-block text-uppercase">
-                آپلود عکس جدید
-              </button>
-            </div>
-          </div>
           <div class="tm-block-col tm-col-account-settings">
             <div class="tm-bg-primary-dark tm-block tm-block-settings">
               <h2 class="tm-block-title">تنظیمات حساب کاربری</h2>
-              <form action="" method="post" class="tm-signup-form row">
+              <form action="" method="post" class="tm-signup-form row" enctype="multipart/form-data">
                 {% csrf_token %}
                 <div class="form-group col-lg-6">
                   <label for="name">نام حساب</label>
@@ -52,6 +34,17 @@
                   <label for="phone">تلفن</label>
                   <br/>
                   {{ form.phone }}
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 mx-auto mb-4" style="margin-top: -20px;">
+                  <div class="custom-file mt-3 mb-3">
+                    <input id="fileInput" type="file" style="display:none;" name="profile_img" />
+                    <input
+                      type="button"
+                      name="profile_img"
+                      class="btn btn-primary btn-block mx-auto"
+                      value="افزودن پروفایل"
+                      onclick="document.getElementById('fileInput').click();"
+                    />
                 </div>
                 <div class="col-12" style="margin-bottom: 20px;">
                   <label class="tm-hide-sm">&nbsp;</label>

@@ -14,7 +14,7 @@
             </div>
             <div class="row tm-edit-product-row">
               <div class="col-xl-6 col-lg-6 col-md-12">
-                <form action="" method="post" class="tm-edit-product-form">
+                <form action="" dir="rtl" method="post" class="tm-edit-product-form" enctype="multipart/form-data">
                   {% csrf_token %}
                   <div class="form-group mb-3">
                     <label
@@ -22,15 +22,28 @@
                       >نام محصول
                     </label>
                     <br>
-                    {{form.name}}
+                    <input
+                      id="name"
+                      name="name"
+                      type="text"
+                      class="form-control validate"
+                      required
+                    />
                   </div>
                   <div class="form-group mb-3">
                     <label
-                      for="description"
+                      for="dec"
                       >توضیحات</label
                     >
                     <br>
-                    {{form.dec}}
+                    <input
+                      margin-right: -35px;
+                      id="dec"
+                      name="dec"
+                      type="text"
+                      class="form-control validate"
+                      required
+                    />
                   </div>
                   <div class="form-group mb-3">
                     <label
@@ -38,37 +51,57 @@
                       >دسته‌بندی</label
                     >
                     <br>
-                    {{form.Category}}
+                    <select class="custom-select tm-select-accounts" id="category" dir="ltr" name="Category">
+                      <option value="">دسته بندی را انتخاب کنید</option>
+                      {% for cat in category %}
+                          <option value="{{ cat.id }}">{{ cat.name }}</option>
+                      {% endfor %}
+                    </select>
                   </div>
                   <div class="row">
                       <div class="form-group mb-3 col-xs-12 col-sm-6">
                           <label
-                            for="expire_date"
+                            for="price"
                             >قیمت
                           </label>
                           <br>
-                          {{form.price}}
+                          <input
+                            id="price"
+                            name="price"
+                            type="number"
+                            class="form-control validate"
+                            required
+                          />
+                        </div>
+                        <div class="form-group mb-3 col-xs-12 col-sm-6">
+                          <label
+                            for="number"
+                            >تعداد موجود در انبار
+                          </label>
+                          <br>
+                          <input
+                            id="number"
+                            name="number"
+                            type="number"
+                            class="form-control validate"
+                            required
+                          />
                         </div>
                   </div>
                   
               </div>
-              {% comment %} <div class="col-xl-6 col-lg-6 col-md-12 mx-auto mb-4">
-                <div class="tm-product-img-dummy mx-auto">
-                  <i
-                    class="fas fa-cloud-upload-alt tm-upload-icon"
-                    onclick="document.getElementById('fileInput').click();"
-                  ></i>
-                </div>
+              <div class="col-xl-6 col-lg-6 col-md-12 mx-auto mb-4">
                 <div class="custom-file mt-3 mb-3">
-                  <input id="fileInput" type="file" style="display:none;" />
+                  <input id="fileInput" type="file" style="display:none;" name="img" />
                   <input
                     type="button"
+                    name="img"
                     class="btn btn-primary btn-block mx-auto"
-                    value="آپلود تصویر محصول"
+                    value="افزودن تصویر"
                     onclick="document.getElementById('fileInput').click();"
                   />
                 </div>
-              </div> {% endcomment %}
+              </div>
               <div class="col-12">
                 <button type="submit" class="btn btn-primary btn-block text-uppercase">اکنون محصول اضافه کنید</button>
               </div>

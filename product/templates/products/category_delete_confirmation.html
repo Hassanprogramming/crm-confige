@@ -1,0 +1,11 @@
+{% extends 'main.html' %}
+
+{% block content %}
+    <h1 style="text-align: center; margin-top: 100px; color: white;">حذف دسته‌بندی</h1>
+    <p dir="rtl" style="text-align: center; margin-top: 100px; color: white;">آیا از حذف دسته‌بندی "{{ category.name }}"اطمینان دارید ؟</p>
+    <form method="post" style="text-align: center;">
+        {% csrf_token %}
+        <input type="submit" value="Delete">
+        <a href="{% url 'products' %}">Cancel</a>
+    </form>
+{% endblock %}

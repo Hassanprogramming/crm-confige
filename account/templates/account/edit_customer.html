@@ -34,26 +34,61 @@
                   <div class="form-group mb-3">
                     <label
                       for="name"
-                      >ناریخ ثبت
+                      >آدرس شرکت
                     </label>
                     <br>
-                    {{ form.date }}
+                    {{ form.address }}
+                  </div>
+                  <div class="form-group mb-3">
+                    <label
+                      for="name"
+                      >شماره شرکت
+                    </label>
+                    <br>
+                    {{ form.customer_numb }}
+                  </div>
+                  <div class="form-group mb-3">
+                    <label
+                      for="name"
+                      >شماره تلفن همراه شرکت
+                    </label>
+                    <br>
+                    {{ form.customer_phone_static }}
+                  </div>
+                  <div class="form-group mb-3" style="color: white">
+                    <label
+                      for="date"
+                      >تاریخ ثبت
+                    </label>
+                    <br>
+                    <input type="text" dir="rtl" value="{{ customer.jtime }}" readonly/>
                   </div>
                   
               </div>
               <div class="col-xl-6 col-lg-6 col-md-12 mx-auto mb-4" style="margin-top: -20px;">
-                <div class="custom-file mt-3 mb-3">
+                <div class="tm-product-img-edit mx-auto">
+                    {% if customer.img %}
+                        <a href="{{ customer.img.url }}" target="_blank">
+                            <img src="{{ customer.img.url }}" alt="تصویر پروفایل" style="border-radius: 50px;" class="img-fluid d-block mx-auto">
+                        </a>
+                    {% else %}
+                        <img src="{% static 'images/placeholder-image.png' %}" alt="تصویر محصول" class="img-fluid d-block mx-auto">
+                    {% endif %}
+                    <i class="fas fa-cloud-upload-alt tm-upload-icon" onclick="document.getElementById('fileInput').click();"></i>
+                </div>
+                <div class="col-12">
                   <input id="fileInput" type="file" style="display:none;" name="img" />
                   <input
                     type="button"
                     name="img"
                     class="btn btn-primary btn-block mx-auto"
-                    value="افزودن پروفایل"
+                    value="تغیر پروفایل"
+                    style="margin-top: 20px;"
                     onclick="document.getElementById('fileInput').click();"
                   />
               </div>
               <div class="col-12">
-                <button type="submit" class="btn btn-primary btn-block text-uppercase">بروزرسانی</button>
+                <button type="submit" class="btn btn-primary btn-block text-uppercase" style="margin-top: 20px;">بروزرسانی</button>
               </div>
             </form>
             </div>

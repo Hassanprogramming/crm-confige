@@ -34,14 +34,14 @@ class User(AbstractBaseUser):
         verbose_name_plural = "کاربران"
         
     name = models.CharField(unique=True, max_length=20)
-    phone = models.CharField(unique=True, max_length=11)
+    phone = models.BigIntegerField(unique=True)
     email = models.EmailField(max_length=100)
     date_created = models.DateTimeField(auto_now_add=True)
     is_admin = models.BooleanField(default=True)
     is_active = models.BooleanField(default=True)
     is_second_admin = models.BooleanField(default=True)
     is_third_admin = models.BooleanField(default=True)
-    profile_img = models.ImageField()
+    profile_img = models.ImageField(upload_to='images/')
     password1 = models.CharField(max_length=150)
     password2 = models.CharField(max_length=150)
     objects = UserManager()
@@ -64,7 +64,7 @@ class User(AbstractBaseUser):
     def jlast_login(self):
         return jalali_converter(self.last_login)
 
-    def jcreated(self):
+    def jtime(self):
         return jalali_converter(self.date_created)
 
     def has_perm(self, perm, obj=None):
@@ -94,11 +94,20 @@ class Customer(models.Model):
         
     name = models.CharField(verbose_name="نام مشتری", max_length=50)
     company_name = models.CharField(verbose_name="نام شرکت", max_length=100)
-    date = models.DateTimeField(verbose_name="تاریخ ثبت مشتری", auto_now=False, auto_now_add=False)
+    address = models.CharField(verbose_name="آدرس مشتری", max_length=250)
+    customer_numb = models.BigIntegerField(verbose_name="شماره تلفن همراه مشتری")
+    customer_phone_static = models.BigIntegerField(verbose_name="شماره تلفن ثابت")
+    date = models.DateTimeField(verbose_name="تاریخ ثبت مشتری", auto_now_add=True)
+    called = models.BooleanField(verbose_name="زنگ زده", blank=True, null=True)
+    be_called = models.BooleanField(verbose_name="ما زنگ زدیم", blank=True, null=True)
     img = models.ImageField(upload_to='images/',verbose_name="لوگوی شرکت", blank=True, null=True)
     
     def __str__(self):
         return self.name
+    
+    def jtime(self):
+        return jalali_converter(self.date)
+    
     @property
     def imageURL(self):
         try:

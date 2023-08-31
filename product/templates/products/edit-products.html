@@ -13,7 +13,7 @@
             </div>
             <div class="row tm-edit-product-row">
               <div class="col-xl-6 col-lg-6 col-md-12">
-                <form action="" method="post" class="tm-edit-product-form">
+                <form action="" dir="rtl" method="post" class="tm-edit-product-form" enctype="multipart/form-data">
                   {% csrf_token %}
                   <div class="form-group mb-3">
                     <label
@@ -34,7 +34,7 @@
                       name="dec"
                       >توضیحات</label
                     >
-                    <textarea                    
+                    <textarea
                       class="form-control validate tm-small"
                       rows="5"
                       required
@@ -49,6 +49,7 @@
                       >دسته‌بندی</label
                     >
                     <select
+                      dir="ltr"
                       class="custom-select tm-select-accounts"
                       id="category"
                       for="Category"
@@ -75,27 +76,38 @@
                             data-large-mode="true"
                           />
                         </div>
+                        <div class="form-group mb-3 col-xs-12 col-sm-6">
+                          <label
+                            for="number"
+                            >تعداد موجود در انبار
+                          </label>
+                          <br>
+                          <input
+                            id="number"
+                            name="number"
+                            type="number"
+                            value="{{ product.number }}"
+                            class="form-control validate"
+                            required
+                          />
+                        </div>
                   </div>
                   
               </div>
               <div class="col-xl-6 col-lg-6 col-md-12 mx-auto mb-4">
                 <div class="tm-product-img-edit mx-auto">
-                  <a href="/static/images/{{product.img}}">
-                  <img src="/static/images/{{product.img}}" alt="تصویر محصول" class="img-fluid d-block mx-auto">
-                  </a>
-                  <i
-                    class="fas fa-cloud-upload-alt tm-upload-icon"
-                    onclick="document.getElementById('fileInput').click();"
-                  ></i>
+                    {% if product.img %}
+                        <a href="{{ product.img.url }}" target="_blank">
+                            <img src="{{ product.img.url }}" alt="تصویر محصول" class="img-fluid d-block mx-auto">
+                        </a>
+                    {% else %}
+                        <img src="{% static 'images/placeholder-image.png' %}" alt="تصویر محصول" class="img-fluid d-block mx-auto">
+                    {% endif %}
+                    <i class="fas fa-cloud-upload-alt tm-upload-icon" onclick="document.getElementById('fileInput').click();"></i>
                 </div>
                 <div class="custom-file mt-3 mb-3">
-                  <input id="fileInput" type="file" style="display:none;" />
-                  <input
-                    type="button"
-                    class="btn btn-primary btn-block mx-auto"
-                    value="تغییر تصویر"
-                    onclick="document.getElementById('fileInput').click();"
-                  />
+                    <input id="fileInput" type="file" style="display:none;" name="img" accept="image/*">
+                    <input type="button" class="btn btn-primary btn-block mx-auto" value="تغییر تصویر" onclick="document.getElementById('fileInput').click();">
                 </div>
               </div>
               <div class="col-12">

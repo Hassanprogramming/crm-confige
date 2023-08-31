@@ -1,6 +1,37 @@
 {% extends 'main.html' %}
 {% block content %}
 {% load static %}
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Custom Print Template</title>
+  <style>
+      /* Your regular CSS styles for the page go here */
+
+      /* Print-specific styles */
+      @media print {
+          /* Styles for the printed page */
+          body {
+              font-family: Arial, sans-serif;
+          }
+
+          /* Adjust these styles to format your printed page */
+          .print-header {
+              text-align: center;
+              margin-bottom: 20px;
+          }
+
+          .print-content {
+              /* Add any specific styles for your printed content here */
+          }
+
+          /* Hide elements that you don't want to print */
+          .no-print {
+              display: none;
+          }
+      }
+  </style>
+</head>
   <body>
     <div class="container tm-mt-big tm-mb-big">
       <div class="row">
@@ -13,8 +44,14 @@
             </div>
             <div class="row tm-edit-product-row">
               <div class="col-xl-6 col-lg-6 col-md-12">
-                <form action="" method="post" class="tm-edit-product-form">
+                <form action="" method="post" dir="rtl" class="tm-edit-product-form" enctype="multipart/form-data">
                   {% csrf_token %}
+                  <div class="form-group mb-3" style="color: white; background-color: darkgrey; text-align: center;">
+                    {{servicees.user}}
+                  </br>
+                  </br>
+                    {{servicees.jtime}}
+                  </div>
                   <div class="form-group mb-3">
                     <label
                       for="name"
@@ -40,24 +77,69 @@
                       required
                       for="dec"
                       name="dec"
-                    >{{ servicees.dec }}</textarea>
+                    >{{ servicees.dec|safe }}</textarea>
+                  </div>
+                  <div class="form-group mb-3">
+                    <label
+                      for="dec_2"
+                      name="dec_2"
+                      >توضیحات بیشتر</label
+                    >
+                    <textarea                    
+                      class="form-control validate tm-small"
+                      rows="5"
+                      required
+                      for="dec_2"
+                      name="dec_2"
+                    >{{ servicees.dec_2|safe }}</textarea>
+                  </div>
+                  <div class="form-group mb-3">
+                    <label
+                      for="customer"
+                      name="customer"
+                      >مشتری ها</label
+                    >
+                    <br>
+                    {{ form.customer }}
+                    {% comment %} <select
+                      class="custom-select tm-select-accounts"
+                      dir="ltr"
+                      id="customer"
+                      for="customer"
+                      name="customer"
+                    >
+                    <option>مشتری را انتخاب کنید</option>
+                    <option style="color: red;" selected>{{ servicees.customer }}</option>
+                    {% for i in servicees.Customer%}
+                      <option value="{{ i.id }}">{{ i.customer }}</option>
+                    {% endfor %}
+                    </select> {% endcomment %}
                   </div>
                   <div class="row">
                       <div class="form-group mb-3 col-xs-12 col-sm-6">
                           <label
-                            for="total_price"
-                            name="total_price"
+                            for="price"
                             >قیمت
                           </label>
                           <input
-                            id="total_price"
-                            name="total_price"
-                            for="total_price"
-                            type="text"
-                            value="{{ servicees.total_price }}"
+                            id="price"
+                            name="price"
+                            for="price"
+                            type="number"
+                            value="{{ servicees.price }}"
                             class="form-control validate"
                             data-large-mode="true"
                           />
+                        </div>
+                        <div class="form-group mb-3 col-xs-12 col-sm-6">
+                          <label for="number">تعداد</label>
+                          <input id="number" name="number" type="number" class="form-control validate" data-large-mode="true" 
+                                 value="{{ servicees.number }}" oninput="calculateTotalPrice()" />
+                        </div>
+                        <div class="form-group mb-3 col-xs-12 col-sm-6">
+                          <label for="total_price">قیمت کل</label>
+                          <input id="total_price" name="total_price" type="number" class="form-control validate" required 
+                                 value="{{ servicees.total_price }}" />
                         </div>
                         <div class="form-group mb-3 col-xs-12 col-sm-6">
                           <label
@@ -71,44 +153,87 @@
                           {{form.checks}}
                           {% endif %}
                         </div>
-                  </div>              
+                  </div>
               </div>
-              {% comment %} <div class="col-xl-6 col-lg-6 col-md-12 mx-auto mb-4">
+              <div class="col-xl-6 col-lg-6 col-md-12 mx-auto mb-4">
                 <div class="tm-product-img-edit mx-auto">
-                  <a href="/static/images/{{product.img}}">
-                  <img src="/static/images/{{product.img}}" alt="تصویر محصول" class="img-fluid d-block mx-auto">
-                  </a>
-                  <i
-                    class="fas fa-cloud-upload-alt tm-upload-icon"
-                    onclick="document.getElementById('fileInput').click();"
-                  ></i>
+                    {% if servicees.img %}
+                        <a href="{{ servicees.img.url }}" target="_blank">
+                            <img src="{{ servicees.img.url }}" alt="تصویر خدمات" class="img-fluid d-block mx-auto">
+                        </a>
+                    {% else %}
+                        <img src="{% static 'images/placeholder-image.png' %}" alt="تصویر خدمات" class="img-fluid d-block mx-auto">
+                    {% endif %}
+                    <i class="fas fa-cloud-upload-alt tm-upload-icon" onclick="document.getElementById('fileInput').click();"></i>
                 </div>
                 <div class="custom-file mt-3 mb-3">
-                  <input id="fileInput" type="file" style="display:none;" />
-                  <input
-                    type="button"
-                    class="btn btn-primary btn-block mx-auto"
-                    value="تغییر تصویر"
-                    onclick="document.getElementById('fileInput').click();"
-                  />
+                    <input id="fileInput" type="file" style="display:none;" name="img" accept="image/*">
+                    <input type="button" class="btn btn-primary btn-block mx-auto" value="تغییر تصویر" onclick="document.getElementById('fileInput').click();">
                 </div>
-              </div> {% endcomment %}
+                <div style="margin-top: 25px;">
+                  <label style="color: white; font-size: 25px;">
+                    اطلاعات مشتری
+                  </label>
+                </div>
+                <div>
+                  <label style="color: white; margin-top: 10px;">
+                    نام مشتری
+                  </label>
+                  </br>
+                  <input value="{{ servicees.customer.company_name }}" readonly/>
+                </div>
+                <div>
+                  <label style="color: white; margin-top: 10px;">
+                    آدرس مشتری
+                  </label>
+                  </br>
+                  <textarea type="text" value="{{ servicees.customer.address }}" readonly/>{{ servicees.customer.address }}</textarea>
+                </div>
+                <div>
+                  <label style="color: white; margin-top: 10px;">
+                    شماره مشتری
+                  </label>
+                  </br>
+                  <input value="{{ servicees.customer.customer_numb }}" readonly/>
+                </div>
+              </div>
               <div class="col-12">
                 <button type="submit" class="btn btn-primary btn-block text-uppercase">بروزرسانی</button>
               </div>
             </form>
+            <div class="col-12">
+              <button type="button" class="btn btn-secondary btn-block text-uppercase" style="margin-top: 10px;" onclick="window.print();">چاپ صفحه</button>
+            </div>
             </div>
           </div>
         </div>
       </div>
     </div>
+    
+    {% comment %} Calculating the total price {% endcomment %}
+
     <script>
-      $(function() {
-        $("#expire_date").datepicker({
-          defaultDate: "22/10/2020"
-        });
-      });
-    </script>
+      function calculateTotalPrice() {
+        // Get the elements
+        var quantityInput = document.getElementById('number');
+        var priceInput = document.getElementById('price');
+        var totalPriceInput = document.getElementById('total_price');
+        
+        // Parse the values
+        var quantity = parseInt(quantityInput.value);
+        var price = parseFloat(priceInput.value);
+        
+        // Calculate the total price
+        var totalPrice = quantity * price;
+        
+        // Set the calculated total price to the input field
+        totalPriceInput.value = totalPrice.toFixed(2); // Display with two decimal places
+      }
+    
+      // Attach the calculateTotalPrice function to the "input" event for the quantity and price inputs
+      document.getElementById('number').addEventListener('input', calculateTotalPrice);
+      document.getElementById('price').addEventListener('input', calculateTotalPrice);
+    </script>    
   </body>
 </html>
 {% endblock %}

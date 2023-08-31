@@ -5,15 +5,23 @@ function drawLineChart() {
     ctxLine = document.getElementById("lineChart").getContext("2d");
     optionsLine = {
       scales: {
+        xAxes: [
+          {
+            scaleLabel: {
+              display: true,
+              labelString: "تاریخ و نام کاربر",
+            },
+          },
+        ],
         yAxes: [
           {
             scaleLabel: {
               display: true,
-              labelString: "Hits"
-            }
-          }
-        ]
-      }
+              labelString: "تعداد",
+            },
+          },
+        ],
+      },
     };
 
     // Set aspect ratio based on window width
@@ -23,110 +31,124 @@ function drawLineChart() {
     configLine = {
       type: "line",
       data: {
-        labels: [
-          "January",
-          "February",
-          "March",
-          "April",
-          "May",
-          "June",
-          "July"
-        ],
+        labels: [], // Persian dates and user names
         datasets: [
           {
-            label: "Latest Hits",
-            data: [88, 68, 79, 57, 50, 55, 70],
+            label: "تعداد فاکتورها",
+            data: [], // User statistics for factors
             fill: false,
             borderColor: "rgb(75, 192, 192)",
             cubicInterpolationMode: "monotone",
-            pointRadius: 0
+            pointRadius: 0,
           },
           {
-            label: "Popular Hits",
-            data: [33, 45, 37, 21, 55, 74, 69],
+            label: "تعداد خدمات",
+            data: [], // User statistics for services
             fill: false,
             borderColor: "rgba(255,99,132,1)",
             cubicInterpolationMode: "monotone",
-            pointRadius: 0
+            pointRadius: 0,
           },
-          {
-            label: "Featured",
-            data: [44, 19, 38, 46, 85, 66, 79],
-            fill: false,
-            borderColor: "rgba(153, 102, 255, 1)",
-            cubicInterpolationMode: "monotone",
-            pointRadius: 0
-          }
-        ]
+        ],
       },
-      options: optionsLine
+      options: optionsLine,
     };
 
-    lineChart = new Chart(ctxLine, configLine);
+    // Make an AJAX request to fetch user stats with dates and user names in Persian
+    $.ajax({
+      url: "/get_user_stats/", // Update with the actual URL
+      method: "GET",
+      success: function (data) {
+        // Convert Gregorian dates to Persian using jalali-moment
+        const persianLabels = data.user_stats.map((user) => {
+          const gregorianDate = moment(user.date, "YYYY-MM-DD");
+          const persianDate = gregorianDate.format("YYYY/MM/DD");
+          return `${persianDate} - ${user.name}`;
+        });
+
+        // Update chart labels with Persian dates and user names
+        configLine.data.labels = persianLabels;
+        configLine.data.datasets[0].data = data.user_stats.map(
+          (user) => user.num_factors
+        );
+        configLine.data.datasets[1].data = data.user_stats.map(
+          (user) => user.num_services
+        );
+
+        // Create or update the chart
+        if (lineChart) {
+          lineChart.update();
+        } else {
+          lineChart = new Chart(ctxLine, configLine);
+        }
+      },
+      error: function (error) {
+        console.error("Error:", error);
+      },
+    });
   }
 }
 
 function drawBarChart() {
+  // Get the start and end date from the input fields
+  const startDate = $("#start_date").val();
+  const endDate = $("#end_date").val();
+
   if ($("#barChart").length) {
     ctxBar = document.getElementById("barChart").getContext("2d");
 
     optionsBar = {
       responsive: true,
       scales: {
+        xAxes: [
+          {
+            stacked: true,
+            ticks: {
+              beginAtZero: true,
+            },
+          },
+        ],
         yAxes: [
           {
+            stacked: true,
             barPercentage: 0.2,
-            ticks: {
-              beginAtZero: true
-            },
             scaleLabel: {
               display: true,
-              labelString: "Hits"
-            }
-          }
-        ]
-      }
+              labelString: "تعداد",
+            },
+          },
+        ],
+      },
     };
 
     optionsBar.maintainAspectRatio =
       $(window).width() < width_threshold ? false : true;
 
-    /**
-     * COLOR CODES
-     * Red: #F7604D
-     * Aqua: #4ED6B8
-     * Green: #A8D582
-     * Yellow: #D7D768
-     * Purple: #9D66CC
-     * Orange: #DB9C3F
-     * Blue: #3889FC
-     */
-
     configBar = {
       type: "horizontalBar",
       data: {
-        labels: ["Red", "Aqua", "Green", "Yellow", "Purple", "Orange", "Blue"],
-        datasets: [
-          {
-            label: "# of Hits",
-            data: [33, 40, 28, 49, 58, 38, 44],
-            backgroundColor: [
-              "#F7604D",
-              "#4ED6B8",
-              "#A8D582",
-              "#D7D768",
-              "#9D66CC",
-              "#DB9C3F",
-              "#3889FC"
-            ],
-            borderWidth: 0
-          }
-        ]
+        labels: [],
+        datasets: [],
       },
-      options: optionsBar
+      options: optionsBar,
     };
 
-    barChart = new Chart(ctxBar, configBar);
+    // Make an AJAX request to fetch data from Django with start and end dates
+    $.ajax({
+      url: "/bar_chart_data/", // Update with your Django URL
+      type: "GET",
+      dataType: "json",
+      data: {
+        start_date: startDate,
+        end_date: endDate,
+      },
+      success: function (data) {
+        configBar.data.labels = data.labels;
+        configBar.data.datasets = data.datasets;
+
+        barChart = new Chart(ctxBar, configBar);
+      },
+    });
   }
 }
 
@@ -146,34 +168,38 @@ function drawPieChart() {
           left: 10,
           right: 10,
           top: 10,
-          bottom: 10
-        }
+          bottom: 10,
+        },
       },
       legend: {
-        position: "top"
-      }
-    };
-
-    configPie = {
-      type: "pie",
-      data: {
-        datasets: [
-          {
-            data: [18.24, 6.5, 9.15],
-            backgroundColor: ["#F7604D", "#4ED6B8", "#A8D582"],
-            label: "Storage"
-          }
-        ],
-        labels: [
-          "Used Storage (18.240GB)",
-          "System Storage (6.500GB)",
-          "Available Storage (9.150GB)"
-        ]
+        position: "top",
       },
-      options: optionsPie
     };
 
-    pieChart = new Chart(ctxPie, configPie);
+    // Make an AJAX request to fetch data from Django
+    $.ajax({
+      url: "/chart_data/", // Update with your Django URL
+      type: "GET",
+      dataType: "json",
+      success: function (data) {
+        configPie = {
+          type: "pie",
+          data: {
+            datasets: [
+              {
+                data: data.data,
+                backgroundColor: data.backgroundColor,
+                label: "Customer Status",
+              },
+            ],
+            labels: data.labels,
+          },
+          options: optionsPie,
+        };
+
+        pieChart = new Chart(ctxPie, configPie);
+      },
+    });
   }
 }
 

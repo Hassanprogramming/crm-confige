@@ -6,7 +6,7 @@ from .models import *
 class Register_Form(forms.ModelForm):
     class Meta:
         model = User
-        fields = ['name', 'phone', 'password1', 'password2', 'email']
+        fields = ['name', 'phone', 'password1', 'password2', 'email', 'profile_img']
         
 class RegisterForm(forms.ModelForm):
     class Meta:
@@ -21,14 +21,14 @@ class ProfileEdit_Form(forms.ModelForm):
 class User_detail_Form(forms.ModelForm):
     class Meta:
         model = User
-        fields = ["phone", "email", "name"]
+        fields = ["phone", "email", "name", 'profile_img']
         
 class AddCustomer(forms.ModelForm):
     class Meta:
         model = Customer
-        fields = ["name", "company_name", "date", "img"]
+        fields = ["name", "company_name", "img", "address", "customer_numb", "customer_phone_static"]
         
 class EditeCustomer(forms.ModelForm):
     class Meta:
         model = Customer
-        fields = ["name", "company_name", "date", "img"]
+        fields = ["name", "company_name", "img", "address", "customer_numb", "customer_phone_static"]

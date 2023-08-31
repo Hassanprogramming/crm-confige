@@ -14,7 +14,7 @@
             </div>
             <div class="row tm-edit-product-row">
               <div class="col-xl-6 col-lg-6 col-md-12">
-                <form action="" method="post" class="tm-edit-product-form">
+                <form action="" method="post" class="tm-edit-product-form" enctype="multipart/form-data">
                   {% csrf_token %}
                   <div class="form-group mb-3">
                     <label
@@ -42,31 +42,59 @@
                       required
                     />
                   </div>
-                  <div class="row">
-                      <div class="form-group mb-3 col-xs-12 col-sm-6">
-                          <label
-                            for="date"
-                            >تاریخ انقضا
-                          </label>
-                          <input
-                            id="date"
-                            name="date"
-                            type="date"
-                            class="form-control validate"
-                            data-large-mode="true"
-                          />
-                      </div>
+                  <div class="form-group mb-3">
+                    <label
+                      for="address"
+                      >آدرس شرکت</label
+                    >
+                    <input
+                      id="address"
+                      name="address"
+                      type="text"
+                      class="form-control validate"
+                      required
+                    />
                   </div>
-                  
+                  <div class="form-group mb-3">
+                    <label
+                      for="customer_numb"
+                      >شماره تلفن همراه شرکت</label
+                    >
+                    <input
+                      id="customer_numb"
+                      name="customer_numb"
+                      type="number"
+                      class="form-control validate"
+                      required
+                    />
+                  </div>
+                  <div class="form-group mb-3">
+                    <label
+                      for="customer_phone_static"
+                      >شماره تلفن ثابت شرکت</label
+                    >
+                    <input
+                      id="customer_phone_static"
+                      name="customer_phone_static"
+                      type="number"
+                      class="form-control validate"
+                      required
+                    />
+                  </div>
+                  <label
+                      for="display" style="color: white;"> 
+                      ما تماس گرفتیم ؟
+                    </label>
+                    <br>
+                    <input type="checkbox" id="{{ form.be_called.id_for_label }}" name="{{ form.be_called.html_name }}" class="checkbox_form" {% if form.be_called.value %}checked{% endif %}>
+                    <br>
+                    <label for="display" style="color: white;">
+                      مشتری تماس گرفته است ؟
+                    </label>
+                    <br>
+                    <input type="checkbox" id="{{ form.called.id_for_label }}" name="{{ form.called.html_name }}" class="checkbox_form" {% if form.called.value %}checked{% endif %}>
               </div>
               <div class="col-xl-6 col-lg-6 col-md-12 mx-auto mb-4">
-                <div class="tm-product-img-dummy mx-auto" name="img"
-                for="img">
-                  <i
-                    class="fas fa-cloud-upload-alt tm-upload-icon"
-                    onclick="document.getElementById('fileInput').click();"
-                  ></i>
-                </div>
                 <div class="custom-file mt-3 mb-3">
                   <input id="fileInput" type="file" style="display:none;" name="img"
                   for="img" />
@@ -75,7 +103,7 @@
                     for="img"
                     type="button"
                     class="btn btn-primary btn-block mx-auto"
-                    value="آپلود تصویر محصول"
+                    value="آپلود تصویر"
                     onclick="document.getElementById('fileInput').click();"
                   />
                 </div>

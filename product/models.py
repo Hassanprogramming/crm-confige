@@ -1,5 +1,8 @@
 from django.db import models
 from django.urls import reverse
+from tinymce import models as tinymce_models
+from extensions.utils import jalali_converter
+
 
 # Create your models here.
 
@@ -21,13 +24,19 @@ class Product(models.Model):
         verbose_name_plural = "محصولات"
         
     name = models.CharField(verbose_name="نام محصول", max_length=100)
-    dec = models.CharField(verbose_name="توضیخات", max_length=500, blank=True, null=True)
+    dec = tinymce_models.HTMLField(verbose_name="توضیخات", max_length=500, blank=True, null=True)
     Category = models.ForeignKey(Category, verbose_name="دسته", on_delete=models.CASCADE)
-    price = models.FloatField()
+    price = models.FloatField(verbose_name="قیمت")
+    number = models.IntegerField(verbose_name="تعداد محصول در انبار")
+    date_created = models.DateTimeField(verbose_name="تاریخ ثبت محصول", auto_now_add=True)
     img = models.ImageField(upload_to='images/',verbose_name="تصویر محصول", blank=True, null=True)
     
     def __str__(self):
         return self.name
+    
+    def jtime(self):
+        return jalali_converter(self.date_created)
+    
     @property
     def imageURL(self):
         try:

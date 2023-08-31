@@ -1,5 +1,5 @@
-{% extends 'main.html' %} 
-{% block content %} 
+{% extends 'main.html' %}
+{% block content %}
 {% load static %} {% load custom_tags %}
 <html lang="fa">
 <link rel="stylesheet" href="{% static 'css/row.css' %}" />
@@ -15,7 +15,7 @@
             </div>
             <div class="row tm-edit-product-row" style="flex-direction: column">
               <div class="col-xl-6 col-lg-6 col-md-12" style="max-width: 100%;">
-                <form action="" method="post" class="tm-edit-product-form">
+                <form action="" method="post" class="tm-edit-product-form" enctype="multipart/form-data">
                   {% csrf_token %}
                   <div class="table-responsive">
                     <table class="table" dir="rtl">
@@ -24,6 +24,7 @@
                           <th>نام خدمات</th>
                           <th>نام مشتری</th>
                           <th>توضیحات</th>
+                          <th>توضیخات بیشتر</th>
                           <th>پرداخت شده؟</th>
                           <th>تعداد</th>
                           <th>قیمت واحد</th>
@@ -36,10 +37,11 @@
                           <td>{{ form.name_service }}</td>
                           <td>{{ form.customer }}</td>
                           <td>{{ form.dec }}</td>
+                          <td>{{ form.dec_2 }}</td>
                           <td>{{ form.checks }}</td>
-                          <td>{{ form.number }}</td>
-                          <td>{{ form.price }}</td>
-                          <td>{{ form.total_price }}</td>
+                          <td><input id="number" type="number" name="number" oninput="calculateTotalPrice()"></td>
+                          <td><input id="price" type="number" name="price" oninput="calculateTotalPrice()"></td>
+                          <td><input id="total_price" type="number" name="total_price" value="{{ servic.total_price }}" readonly></td>
                           <td>{{ form.img }}</td>
                         </tr>
                       </tbody>
@@ -55,6 +57,26 @@
         </div>
       </div>
     </div>
+
+    <script>
+      function calculateTotalPrice() {
+        // Get the elements
+        var quantityInput = document.getElementById('number');
+        var priceInput = document.getElementById('price');
+        var totalPriceInput = document.getElementById('total_price');
+        
+        // Parse the values
+        var quantity = parseInt(quantityInput.value);
+        var price = parseFloat(priceInput.value);
+        
+        // Calculate the total price
+        var totalPrice = quantity * price;
+        
+        // Set the calculated total price to the input field
+        totalPriceInput.value = totalPrice.toFixed(2); // Display with two decimal places
+      }
+    </script>
+
   </body>
 </html>
 {% endblock %}

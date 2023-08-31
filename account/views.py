@@ -8,8 +8,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth import get_user_model
-
+from django.contrib.auth.hashers import make_password
 
 
 # Create your views here.
@@ -51,9 +50,18 @@ class RegisterView(View):
         return render(request, 'account/register.html', context)
     
     def post(self, request):
-        form = Register_Form(request.POST)
+        form = Register_Form(request.POST, request.FILES)
+        print(form.data)
+        print(form.errors)
         if form.is_valid():
-            form.save()
+            print(form.errors)
+            user = form.save(commit=False)
+
+# Perform additional processing, e.g., hashing the password
+            user.password = make_password(form.cleaned_data['password1'])
+
+            # Save the user to the database
+            user.save()
             return HttpResponseRedirect(reverse('Home'))
         else:
             context = {

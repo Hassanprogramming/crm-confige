@@ -13,82 +13,81 @@
             </div>
             <div class="row tm-edit-product-row">
               <div class="col-xl-6 col-lg-6 col-md-12">
-                <form action="" method="post" class="tm-edit-product-form">
+                <form action="" method="post" dir="rtl" class="tm-edit-product-form" enctype="multipart/form-data">
                   {% csrf_token %}
+                  <div class="form-group mb-3" style="color: white; background-color: darkgrey; text-align: center;">
+                    {{factors.user}}
+                  </br>
+                  </br>
+                    {{factors.jtime}}
+                  </div>
                   <div class="form-group mb-3">
                     <label
                       for="name"
                       >نام محصول
                     </label>
                     <br>
-                    {{ factors.name }}
                     {{ form.name }}
-                    {% comment %} <input
-                        id="name"
-                        name="name"
-                        type="text"
-                        class="form-control validate"
-                        value="{{ factors.name }}"
-                        required
-                    /> {% endcomment %}
+                    {% comment %} <select class="custom-select tm-select-accounts" dir="ltr" id="name" name="name" onchange="handleProductSelection(this.value)">
+                      <option value="{{ factors.name }}" selected>{{ factors.name|safe }}</option>
+                      <option>محصول را انتخاب کنید</option>
+                      {% for i in product_names %}
+                        {% if i.id != factors.name %}
+                          <option value="{{ i.id }}">{{ i.name|safe }}</option>
+                        {% endif %}
+                      {% endfor %}
+                    </select>                     {% endcomment %}
                   </div>
-                  <div class="form-group mb-3">
+                  <div class="form-group mb-3" id="editable">
                     <label
                       for="dec"
-                      name="dec"
                       >توضیحات</label
                     >
-                    {% comment %} {{ form.dec }} {% endcomment %}
+                    <textarea class="form-control validate tm-small" rows="5" required for="dec" name="dec">{{ factors.dec|safe }}</textarea>
+                  </div>
+                  <div class="form-group mb-3" id="editable">
+                    <label
+                      for="dec_2"
+                      >توضیحات بیشتر</label
+                    >
                     <textarea                    
                       class="form-control validate tm-small"
                       rows="5"
                       required
-                      for="dec"
-                      name="dec"
-                    >{{ factors.dec }}</textarea>
+                      for="dec_2"
+                      name="dec_2"
+                    >{{ factors.dec_2|safe }}</textarea>
                   </div>
                   <div class="form-group mb-3">
                     <label
                       for="Category"
-                      name="Category"
                       >دسته‌بندی</label
                     >
-                    {% comment %} {{ form.Category }} {% endcomment %}
-                    <select
-                      class="custom-select tm-select-accounts"
-                      id="category"
-                      for="Category"
-                      name="Category"
+                    <br>
+                    {{form.Category}}
+                  </div>
+                  <div class="form-group mb-3">
+                    <label
+                      for="customer"
+                      >مشتری ها</label
                     >
-                      <option>دسته‌بندی را انتخاب کنید</option>
-                      <option value="1" selected>{{ factors.Category }}</option>
-                    </select>
+                    <br>
+                    {{ form.customer }}
                   </div>
                   <div class="row">
                       <div class="form-group mb-3 col-xs-12 col-sm-6">
                           <label
                             for="price"
-                            name="price"
                             >قیمت
                           </label>
-                          {% comment %} {{ form.price }} {% endcomment %}
-                          <input
-                            id="price"
-                            name="price"
-                            for="price"
-                            type="text"
-                            value="{{ factors.price }}"
-                            class="form-control validate"
-                            data-large-mode="true"
-                          />
+                          <input id="price" name="price" for="price" type="number" value="{{ factors.price }}" class="form-control validate" data-large-mode="true" />
+
                         </div>
                         <div class="form-group mb-3 col-xs-12 col-sm-6">
                           <label
                             for="number"
-                            name="number"
                             >تعداد
                           </label>
-                          {% comment %} {{ form.number }} {% endcomment %}
                           <input
                             id="number"
                             name="number"
@@ -102,15 +101,13 @@
                         <div class="form-group mb-3 col-xs-12 col-sm-6">
                           <label
                             for="total_price"
-                            name="total_price"
                             >قیمت کل
                           </label>
-                          {% comment %} {{ form.total_price }} {% endcomment %}
                           <input
                             id="total_price"
                             name="total_price"
                             for="total_price"
-                            type="text"
+                            type="number"
                             value="{{ factors.total_price }}"
                             class="form-control validate"
                             data-large-mode="true"
@@ -131,42 +128,131 @@
                   </div>
                   
               </div>
-              {% comment %} <div class="col-xl-6 col-lg-6 col-md-12 mx-auto mb-4">
+              <div class="col-xl-6 col-lg-6 col-md-12 mx-auto mb-4">
                 <div class="tm-product-img-edit mx-auto">
-                  <a href="/static/images/{{product.img}}">
-                  <img src="/static/images/{{product.img}}" alt="تصویر محصول" class="img-fluid d-block mx-auto">
-                  </a>
-                  <i
-                    class="fas fa-cloud-upload-alt tm-upload-icon"
-                    onclick="document.getElementById('fileInput').click();"
-                  ></i>
+                    {% if factors.img %}
+                        <a href="{{ factors.img.url }}" target="_blank">
+                            <img src="{{ factors.img.url }}" alt="تصویر محصول" class="img-fluid d-block mx-auto">
+                        </a>
+                    {% else %}
+                        <img src="{% static 'images/placeholder-image.png' %}" alt="تصویر محصول" class="img-fluid d-block mx-auto">
+                    {% endif %}
+                    <i class="fas fa-cloud-upload-alt tm-upload-icon" onclick="document.getElementById('fileInput').click();"></i>
                 </div>
                 <div class="custom-file mt-3 mb-3">
-                  <input id="fileInput" type="file" style="display:none;" />
-                  <input
-                    type="button"
-                    class="btn btn-primary btn-block mx-auto"
-                    value="تغییر تصویر"
-                    onclick="document.getElementById('fileInput').click();"
-                  />
+                    <input id="fileInput" type="file" style="display:none;" name="img" accept="image/*">
+                    <input type="button" class="btn btn-primary btn-block mx-auto" value="تغییر تصویر" onclick="document.getElementById('fileInput').click();">
                 </div>
-              </div> {% endcomment %}
+                <div style="margin-top: 25px;">
+                  <label style="color: white; font-size: 25px;">
+                    اطلاعات مشتری
+                  </label>
+                </div>
+                <div>
+                  <label style="color: white; margin-top: 10px;">
+                    نام مشتری
+                  </label>
+                  </br>
+                  <input value="{{ factors.customer.company_name }}" readonly/>
+                </div>
+                <div>
+                  <label style="color: white; margin-top: 10px;">
+                    آدرس مشتری
+                  </label>
+                  </br>
+                  <textarea type="text" readonly/>{{ factors.customer.address }}</textarea>
+                </div>
+                <div>
+                  <label style="color: white; margin-top: 10px;">
+                    شماره مشتری
+                  </label>
+                  </br>
+                  <input value="{{ factors.customer.customer_numb }}" readonly/>
+                </div>
+                {% if form.errors %}
+                <div dir="rtl" style="background-color: white; margin-top: 30px; text-align: start;">
+                  <label>
+                    ابتدا ارور های زیر را برطرف کنید سپس مجددا امتحان کنید.
+                  </label>
+                  <br>
+                  {{form.errors}}
+                </div>
+                {% endif %}
+              </div>
+              </div>
               <div class="col-12">
-                <button type="submit" class="btn btn-primary btn-block text-uppercase">بروزرسانی</button>
+                <button type="submit" class="btn btn-primary btn-block text-uppercase" style="margin-top: 30px;">بروزرسانی</button>
               </div>
             </form>
+            <div class="col-12">
+              <button type="button" class="btn btn-secondary btn-block text-uppercase" style="margin-top: 10px;" onclick="window.print();">چاپ صفحه</button>
+            </div>
             </div>
           </div>
         </div>
       </div>
     </div>
+
+    {% comment %} Showing the product details {% endcomment %}
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-      $(function() {
-        $("#expire_date").datepicker({
-          defaultDate: "22/10/2020"
+      function handleProductSelection(productId) {
+        $.ajax({
+          url: '{% url "product_details" %}',  // Replace with your actual URL
+          method: 'GET',
+          data: { product_id: productId },
+          success: function(response) {
+            // Update the product details in the UI
+            var productDetailsHtml = `
+              <h4>${response.name}</h4>
+              <p>${response.dec}</p>
+              <p>Price: ${response.price}</p>
+              <!-- Add more details as needed -->
+            `;
+            $('#product-details').html(productDetailsHtml);
+
+            // Update the product image in the UI
+            var productImageHtml = `
+              <img src="${response.image_url}" alt="${response.name}" class="img-fluid">
+            `;
+            $('#product-image').html(productImageHtml);
+
+            // Update the price field with the fetched product's price
+            $('#price').val(response.price);
+          },
+          error: function(error) {
+            console.log('Error:', error);
+          }
         });
-      });
+      }
+    </script>
+
+    {% comment %} Calculating the total price {% endcomment %}
+
+    <script>
+      function calculateTotalPrice() {
+        // Get the elements
+        var quantityInput = document.getElementById('number');
+        var priceInput = document.getElementById('price');
+        var totalPriceInput = document.getElementById('total_price');
+        
+        // Parse the values
+        var quantity = parseInt(quantityInput.value);
+        var price = parseFloat(priceInput.value);
+        
+        // Calculate the total price
+        var totalPrice = quantity * price;
+        
+        // Set the calculated total price to the input field
+        totalPriceInput.value = totalPrice.toFixed(2); // Display with two decimal places
+      }
+    
+      // Attach the calculateTotalPrice function to the "input" event for the quantity and price inputs
+      document.getElementById('number').addEventListener('input', calculateTotalPrice);
+      document.getElementById('price').addEventListener('input', calculateTotalPrice);
     </script>
   </body>
 </html>
 {% endblock %}
+

@@ -22,7 +22,7 @@
                             {% for i in services %}
                             <tbody>
                                 <tr>
-                                    <th scope="row"><input type="checkbox" /></th>
+                                    <th scope="row"></th>
                                     <td class="tm-product-name"><a href="{{ i.id }}" style="color: white">{{ i.name_service }}</a></td>
                                     <td>{{ i.total_price }}</td>
                                     {% if i.checks == True %}
@@ -30,9 +30,9 @@
                                     {% else %}
                                     <td><input type="checkbox" onclick="return false;" /></td>
                                     {% endif %}
-                                    <td>{{ i.date }}</td>
+                                    <td dir="rtl">{{ i.jtime }}</td>
                                     <td>
-                                        <a href="#" class="tm-product-delete-link">
+                                        <a href="{% url 'delete_servic' pk=i.pk %}" class="tm-product-delete-link">
                                             <i class="far fa-trash-alt tm-product-delete-icon"></i>
                                         </a>
                                     </td>
@@ -43,9 +43,6 @@
                     </div>
                     <!-- جدول محصولات -->
                     <a href="{% url 'add_service' %}" class="btn btn-primary btn-block text-uppercase mb-3">افزودن خدمات جدید</a>
-                    <button class="btn btn-primary btn-block text-uppercase">
-                        حذف خدمات انتخاب شده
-                    </button>
                 </div>
             </div>
         </div>

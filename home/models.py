@@ -2,6 +2,9 @@ from django.db import models
 from account.models import *
 from product.models import *
 from account.models import *
+from tinymce import models as tinymce_models
+from extensions.utils import jalali_converter
+
 
 # Create your models here.
 
@@ -15,7 +18,8 @@ class Factor(models.Model):
     name = models.ForeignKey(Product, verbose_name="نام محصول", max_length=100, on_delete=models.CASCADE, blank=True, null=True)
     Category = models.ForeignKey(Category, verbose_name="دسته", max_length=100, on_delete=models.CASCADE)
     date = models.DateTimeField(verbose_name="تاریخ ثبت", auto_now_add=True)
-    dec = models.TextField(verbose_name="توضیحات", max_length=500)
+    dec = tinymce_models.HTMLField(verbose_name="توضیحات", max_length=1000)
+    dec_2 = tinymce_models.HTMLField("توضیحات بیشتر", max_length=1000)
     checks = models.BooleanField(verbose_name="پرداخت شده؟")
     number = models.FloatField(verbose_name="تعداد")
     price = models.FloatField(verbose_name="قیمت", blank=True, null=True)
@@ -31,6 +35,9 @@ class Factor(models.Model):
         except:
             url = ''
         return url
+    
+    def jtime(self):
+        return jalali_converter(self.date)
 
 
 class service(models.Model):
@@ -42,7 +49,8 @@ class service(models.Model):
     customer = models.ForeignKey(Customer , verbose_name="مشتری", on_delete=models.CASCADE)
     name_service = models.CharField(verbose_name="نام خدمات", max_length=100)
     date = models.DateTimeField(verbose_name="تاریخ ثبت", auto_now_add=True)
-    dec = models.TextField(verbose_name="توضیحات", max_length=500)
+    dec = tinymce_models.HTMLField(verbose_name="توضیحات", max_length=1000)
+    dec_2 = tinymce_models.HTMLField("توضیحات بیشتر", max_length=1000)
     checks = models.BooleanField(verbose_name="پرداخت شده؟")
     number = models.FloatField(verbose_name="تعداد", blank=True, null=True)
     price = models.FloatField(verbose_name="قیمت", blank=True, null=True)
@@ -58,4 +66,7 @@ class service(models.Model):
         except:
             url = ''
         return url
+    
+    def jtime(self):
+        return jalali_converter(self.date)
     

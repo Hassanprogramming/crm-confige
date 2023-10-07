@@ -39,22 +39,38 @@ class FactorView(View):
         return render(request, 'home/factors.html', {'factor': factor})
     
     
-class AddFactorView(View):
+class FactorView(View):
     @method_decorator(login_required)
     def get(self, request):
-        category = Category.objects.filter(display=True)
-        product = Product.objects.all()
-        customer =  Customer.objects.all()
-        factor = Factor.objects.all()
-        form = Add_Factor_Form()
-        context = {
-            'form': form,
-            'factor': factor,
-            'category': category,
-            'product': product,
-            'customer': customer,
-        }
-        return render(request, 'home/add-factors.html', context)
+        if request.user.is_admin or request.user.is_second_admin:
+            customers = Customer.objects.all()
+            users = User.objects.all()
+            if request.user.is_admin:
+                factors = Factor.objects.all()
+            else:
+                factors = Factor.objects.filter(user=request.user)
+    
+            # Apply filters based on request GET parameters
+            customer_filter = request.GET.get('customer_filter')
+            user_filter = request.GET.get('user_filter')
+            total_price_filter = request.GET.get('total_price_filter')
+    
+            if customer_filter:
+                factors = factors.filter(customer_id=customer_filter)
+    
+            if user_filter:
+                factors = factors.filter(user_id=user_filter)
+    
+            if total_price_filter:
+                try:
+                    total_price_filter = float(total_price_filter)
+                    factors = factors.filter(total_price=total_price_filter)
+                except ValueError:
+                    pass  # Handle invalid input gracefully
+    
+            return render(request, 'home/factors.html', {'factor': factors, 'users': users, 'customers': customers})
+        else:
+            return redirect('access')
     
     @method_decorator(login_required)
     def post(self, request):
